@@ -5,7 +5,11 @@ const lm = (x, t0, t1) => {
       return output
   }
 
-
+const softmax = (model) => {
+      const z = 1 + math.e**-model
+      const logit = 1/z
+      return z
+      }
 
 
 
