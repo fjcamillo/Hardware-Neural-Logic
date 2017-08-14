@@ -1,4 +1,14 @@
-var Cylon = require('cylon');
+const Cylon = require('cylon');
+
+const lm = (x, t0, t1) => {
+      const output = t0 + t1*x
+      return output
+  }
+
+
+
+
+
 
 Cylon.robot({
   connections: {
