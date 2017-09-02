@@ -1,5 +1,5 @@
-const Cylon = require('cylon');
-
+import Cylon from 'cylon'
+import model from './model'
 
 
 Cylon.robot({
