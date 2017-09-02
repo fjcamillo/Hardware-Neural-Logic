@@ -1,4 +1,18 @@
-var Cylon = require('cylon');
+const Cylon = require('cylon');
+
+const lm = (x, t0, t1) => {
+      const output = t0 + t1*x
+      return output
+  }
+
+const softmax = (model) => {
+      const z = 1 + math.e**-model
+      const logit = 1/z
+      return z
+      }
+
+
+
 
 Cylon.robot({
   connections: {
