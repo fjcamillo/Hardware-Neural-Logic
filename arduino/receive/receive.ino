@@ -4,10 +4,14 @@ void setup() {
 }
 
 void loop() {
-  if(Serial.available() > 0){
+  if(Serial.read() == 0){
     digitalWrite(13, HIGH);
-    delay(100);
+    delay(1000);
+//    digitalWrite(13, LOW);
+//    delay(1000);
+  }
+  else {
     digitalWrite(13, LOW);
     delay(1000);
-  }
+    }
 }

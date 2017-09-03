@@ -1,6 +1,8 @@
 import numpy as np
 from functools import reduce
+import serial
 
+arduino = serial.Serial('/dev/ttyACM0', 9600, timeout=.1)
 
 def perceptron(weight, bias, x):
     model = np.add(np.dot(x, weight), bias)
@@ -11,9 +13,11 @@ def perceptron(weight, bias, x):
 
 def compute(logictype, weightdict, dataset):
     weights = np.array([ weightdict[logictype][w] for w in weightdict[logictype].keys()[::-1]])
-    output = np.array([ perceptron(weights, weightdict['bias'][logictype], val) for val in dataset])
+    # output = np.array([ perceptron(weights, weightdict['bias'][logictype], val) for val in dataset])
+    output = np.array([perceptron(weights, weightdict['bias'][logictype], dataset)])
     print(logictype)
-    return logictype, output
+    print(int(output[0]))
+    return logictype, int(output[0])
 
 def main():
     logic = {
@@ -84,9 +88,12 @@ def main():
     """)
 
 
-    compute_type = ['lgoic_and', 'logic_or', 'logic_not']
+    compute_type = ['logic_and', 'logic_or', 'logic_not']
 
-    output = compute()
+    chosen_type, output = compute(compute_type[int(logic_type)-1], logic, dataset[int(data)-1])
+    arduino.write(output)
+
 
 if __name__ == '__main__':
-    main()
+    while True:
+        main()
