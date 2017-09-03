@@ -1,41 +1,92 @@
-import serial
-import json
-
-arduino = serial.Serial('/dev/ttyACM0', 9600, timeout=.1 )
-
-with open('./src/data.json', 'r') as f:
-    data = json.load(f)
-print(data)
-def getweights(data, logic):
-    return data[logic]['features'], data[logic]['labels'], data[logic]['weights']
-
-def linearmodel(feature, input_data, weights):
-    model = feature[input_data][0]*weights[0][0] + feature[input_data][1]*weights[1][0] + feature[input_data][2]*weights[2][0]
-    print(f"model: {model}")
-    return int(model)
+import numpy as np
+from functools import reduce
 
 
+def perceptron(weight, bias, x):
+    model = np.add(np.dot(x, weight), bias)
+    print('model: {}'.format(model))
+    logit = 1/(1+np.exp(-model))
+    print('Type: {}'.format(logit))
+    return np.round(logit)
 
-while True:
-    inp = input("""
+def compute(logictype, weightdict, dataset):
+    weights = np.array([ weightdict[logictype][w] for w in weightdict[logictype].keys()[::-1]])
+    output = np.array([ perceptron(weights, weightdict['bias'][logictype], val) for val in dataset])
+    print(logictype)
+    return logictype, output
+
+def main():
+    logic = {
+        'logic_and' : {
+            'w0': -0.1,
+            'w1': 0.2,
+            'w2': 0.2
+        },
+        'logic_or': {
+            'w0': -0.1,
+            'w1': 0.7,
+            'w2': 0.7
+        },
+        'logic_not': {
+            'w0': 0.5,
+            'w1': -0.7
+        },
+        'logic_nand': {
+            'w0': 0.6,
+            'w1': -0.8,
+            'w2': -0.8
+        },
+        'logic_nor': {
+            'w0': 0.5,
+            'w1': -0.7,
+            'w2': -0.7
+        },
+        'logic_xor': {
+            'w0': -5,
+            'w1': 20,
+            'w2': 10
+        },
+        'logic_xnor': {
+            'w0': -5,
+            'w1': 20,
+            'w2': 10
+        },
+        'bias': {
+            'logic_and': -0.2,
+            'logic_or': -0.1,
+            'logic_not': 0.1,
+            'logic_xor': 1,
+            'logic_xnor': 1,
+            'logic_nand': 0.3,
+            'logic_nor': 0.1
+        }
+    }
+    dataset = np.array([
+        [1,0,0],
+        [1,0,1],
+        [1,1,0],
+        [1,1,1]
+    ])
+
+    logic_type = input("""
     Logic Type:
     1. AND
     2. OR
     3. NOT
-    """
-    )
-    inp_types = ['and', 'or', 'not']
-    print(f"Chosen Logic Type {inp}")
+    """)
 
-    input_data = input("""
-    Input Type:
+    data = input("""
+    Data:
     1. [0, 0]
     2. [0, 1]
     3. [1, 0]
     4. [1, 1]
     """)
 
-    features, labels, weights = getweights(data, inp_types[int(inp)-1])
-    output = linearmodel(features, int(input_data)-1, weights)
-    print(f"output: {output}")
-    arduino.write(output)
+
+    compute_type = ['lgoic_and', 'logic_or', 'logic_not']
+
+    output = compute()
+
+if __name__ == '__main__':
+    main()
