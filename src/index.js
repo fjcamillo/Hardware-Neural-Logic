@@ -24,9 +24,13 @@ import five from 'johnny-five'
 //   }
 // }).start();
 
-const board  = new five.Board()
+const board  = new five.Board(
+  // {
+  //     port: '/dev/ttyACM0'
+  // }
+)
 
 board.on('ready', () => {
   const led = new five.Led(13)
-  led.blink
+  led.blink(500)
 })

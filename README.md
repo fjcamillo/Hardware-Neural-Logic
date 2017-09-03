@@ -2,10 +2,7 @@
 
 --------
 
-Implementing basic neural network on an arduino using cylon.js. Although this may be an overkill for the whole process, it also serves as a learning project for cylon.js
+At first I wanted to implement the repository neural network on logic gates using javascript, specifically cylon.js/johnny-five
+But unfortunately there are problems with the board that I am using and the said libraries, will work on fixing this problems in the futre and
 
 ---------
-
-Notes:
-
-Cylon.JS will handle the computation and processing, the arduino will only serve as the output for the project. No arduino codes will be used
