@@ -1,5 +1,5 @@
 'use strict'
 
-const cost = async () => {
-  
+export async function cost() => {
+
 }
