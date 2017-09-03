@@ -3,15 +3,16 @@ import json
 
 arduino = serial.Serial('/dev/ttyACM0', 9600, timeout=.1 )
 
-with open('./data.json', 'r') as f:
+with open('./src/data.json', 'r') as f:
     data = json.load(f)
 print(data)
 def getweights(data, logic):
     return data[logic]['features'], data[logic]['labels'], data[logic]['weights']
 
 def linearmodel(feature, input_data, weights):
-    model = weights[0][0] + feature[input_data][0]*weights[1][0] + feature[input_data][1]*weights[2][0]
-    return model
+    model = feature[input_data][0]*weights[0][0] + feature[input_data][1]*weights[1][0] + feature[input_data][2]*weights[2][0]
+    print(f"model: {model}")
+    return int(model)
 
 
 
@@ -36,5 +37,5 @@ while True:
 
     features, labels, weights = getweights(data, inp_types[int(inp)-1])
     output = linearmodel(features, int(input_data)-1, weights)
-
+    print(f"output: {output}")
     arduino.write(output)
